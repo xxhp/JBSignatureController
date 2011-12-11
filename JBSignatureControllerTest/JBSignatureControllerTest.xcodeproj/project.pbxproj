@@ -36,9 +36,9 @@
 		05F2501314951B6E00C4B5F3 /* bg-signature-landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-signature-landscape@2x.png"; sourceTree = "<group>"; };
 		05F2501414951B6E00C4B5F3 /* bg-signature-portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-signature-portrait.png"; sourceTree = "<group>"; };
 		05F2501514951B6E00C4B5F3 /* bg-signature-portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-signature-portrait@2x.png"; sourceTree = "<group>"; };
-		05F2501614951B6E00C4B5F3 /* JBSignatureController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = JBSignatureController.h; sourceTree = "<group>"; };
+		05F2501614951B6E00C4B5F3 /* JBSignatureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JBSignatureController.h; sourceTree = "<group>"; };
 		05F2501714951B6E00C4B5F3 /* JBSignatureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JBSignatureController.m; sourceTree = "<group>"; };
-		05F2501814951B6E00C4B5F3 /* JBSignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = JBSignatureView.h; sourceTree = "<group>"; };
+		05F2501814951B6E00C4B5F3 /* JBSignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JBSignatureView.h; sourceTree = "<group>"; };
 		05F2501914951B6E00C4B5F3 /* JBSignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JBSignatureView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -295,6 +295,7 @@
 				05F2501014951B2300C4B5F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

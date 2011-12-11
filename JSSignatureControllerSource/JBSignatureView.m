@@ -90,6 +90,8 @@ handwritingCoords = handwritingCoords_;
 			CGContextMoveToPoint(context, tapLocation.x, tapLocation.y);
 			isFirstPoint = NO;
 		} else {
+			CGPoint startPoint = CGContextGetPathCurrentPoint(context);
+			CGContextAddQuadCurveToPoint(context, startPoint.x, startPoint.y, tapLocation.x, tapLocation.y);
 			CGContextAddLineToPoint(context, tapLocation.x, tapLocation.y);
 		}
 		

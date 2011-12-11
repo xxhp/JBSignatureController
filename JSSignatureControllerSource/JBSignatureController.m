@@ -19,6 +19,7 @@
 	__strong UIImageView *signaturePanelBackgroundImageView_;
 	__strong UIImage *portraitBackgroundImage_, *landscapeBackgroundImage_;
 	__strong UIButton *confirmButton_, *cancelButton_;
+	__weak id<JBSignatureControllerDelegate> delegate_;
 }
 
 // The view responsible for handling signature sketching
@@ -26,6 +27,10 @@
 
 // The background image underneathe the sketch
 @property(nonatomic,strong) UIImageView *signaturePanelBackgroundImageView;
+
+// Private Methods
+-(void)didTapCanfirmButton;
+-(void)didTapCancelButton;
 
 @end
 
@@ -37,7 +42,10 @@
 signaturePanelBackgroundImageView = signaturePanelBackgroundImageView_,
 signatureView = signatureView_,
 portraitBackgroundImage = portraitBackgroundImage_,
-landscapeBackgroundImage = landscapeBackgroundImage_;
+landscapeBackgroundImage = landscapeBackgroundImage_,
+confirmButton = confirmButton_,
+cancelButton = cancelButton_,
+delegate = delegate_;
 
 
 
@@ -50,10 +58,7 @@ landscapeBackgroundImage = landscapeBackgroundImage_;
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	
 	if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-		self.signaturePanelBackgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg-signature-portrait"]];
-		self.signatureView = [[JBSignatureView alloc] init];
-		self.portraitBackgroundImage = [UIImage imageNamed:@"bg-signature-portrait"];
-		self.landscapeBackgroundImage = [UIImage imageNamed:@"bg-signature-landscape"];
+
 	}
 	
 	return self;
@@ -70,7 +75,39 @@ landscapeBackgroundImage = landscapeBackgroundImage_;
 
 
 
+
 #pragma mark - *** View Lifecycle ***
+
+/**
+ * Since we're not using a nib. We need to load our views manually.
+ * @author Jesse Bunch
+ **/
+-(void)loadView {
+	
+	self.view = [[UIView alloc] initWithFrame:[[[UIApplication sharedApplication] keyWindow] bounds]];
+	
+	self.portraitBackgroundImage = [UIImage imageNamed:@"bg-signature-portrait"];
+	self.landscapeBackgroundImage = [UIImage imageNamed:@"bg-signature-landscape"];
+	
+	self.signaturePanelBackgroundImageView = [[UIImageView alloc] initWithImage:self.portraitBackgroundImage];
+	
+	self.signatureView = [[JBSignatureView alloc] init];
+	
+	self.confirmButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[self.confirmButton setTitle:@"Confirm" forState:UIControlStateNormal];
+	[self.confirmButton sizeToFit];
+	[self.confirmButton setFrame:CGRectMake(self.view.frame.size.width - self.confirmButton.frame.size.width - 10.0f, 10.0f, self.confirmButton.frame.size
+											.width, self.confirmButton.frame.size.height)];
+	[self.confirmButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
+	
+	
+	self.cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+	[self.cancelButton sizeToFit];
+	[self.cancelButton setFrame:CGRectMake(10.0f, 10.0f, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height)];
+	[self.cancelButton setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
+	
+}
 
 /**
  * Setup the view heirarchy
@@ -78,12 +115,22 @@ landscapeBackgroundImage = landscapeBackgroundImage_;
  **/
 -(void)viewDidLoad {
 	
+	// Background Image
 	[self.signaturePanelBackgroundImageView setFrame:self.view.bounds];
 	[self.signaturePanelBackgroundImageView setContentMode:UIViewContentModeTopLeft];
 	[self.view addSubview:self.signaturePanelBackgroundImageView];
 	
+	// Signature View
 	[self.signatureView setFrame:self.view.bounds];
 	[self.view addSubview:self.signatureView];
+	
+	// Buttons
+	[self.view addSubview:self.cancelButton];
+	[self.view addSubview:self.confirmButton];
+	
+	// Button actions
+	[self.confirmButton addTarget:self action:@selector(didTapCanfirmButton) forControlEvents:UIControlEventTouchUpInside];
+	[self.cancelButton addTarget:self action:@selector(didTapCancelButton) forControlEvents:UIControlEventTouchUpInside];
 	
 }
 
@@ -119,6 +166,33 @@ landscapeBackgroundImage = landscapeBackgroundImage_;
 	[self.signatureView setNeedsDisplay];
 }
 
+
+#pragma mark - *** Actions ***
+
+/**
+ * Upon confirmation, message the delegate with the image of the signature.
+ * @author Jesse Bunch
+ **/
+-(void)didTapCanfirmButton {
+	
+	if (self.delegate && [self.delegate respondsToSelector:@selector(signatureConfirmed:signatureController:)]) {
+		UIImage *signatureImage = [self.signatureView getSignatureImage];
+		[self.delegate signatureConfirmed:signatureImage signatureController:self];
+	}
+	
+}
+
+/**
+ * Upon cancellation, message the delegate.
+ * @author Jesse Bunch
+ **/
+-(void)didTapCancelButton {
+	
+	if (self.delegate && [self.delegate respondsToSelector:@selector(signatureCancelled:)]) {
+		[self.delegate signatureCancelled:self];
+	}
+	
+}
 
 
 @end

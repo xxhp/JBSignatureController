@@ -23,6 +23,9 @@
 // Delegate
 @property(nonatomic,weak) id<JBSignatureControllerDelegate> delegate;
 
+// Clear the signature
+-(void)clearSignature;
+
 @end
 
 
@@ -39,5 +42,8 @@
 
 // Called when the user clicks the cancel button
 -(void)signatureCancelled:(JBSignatureController *)sender;
+
+// Called when the user clears their signature or when clearSignature is called.
+-(void)signatureCleared:(UIImage *)clearedSignatureImage signatureController:(JBSignatureController *)sender;
 
 @end

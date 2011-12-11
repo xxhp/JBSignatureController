@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		050374DD14953F3A00AC2668 /* NSFileManager+DirectoryLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 050374DC14953F3A00AC2668 /* NSFileManager+DirectoryLocations.m */; };
 		05F24FFB14951B2300C4B5F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F24FFA14951B2300C4B5F3 /* UIKit.framework */; };
 		05F24FFD14951B2300C4B5F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F24FFC14951B2300C4B5F3 /* Foundation.framework */; };
 		05F24FFF14951B2300C4B5F3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F24FFE14951B2300C4B5F3 /* CoreGraphics.framework */; };
@@ -22,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		050374DB14953F3A00AC2668 /* NSFileManager+DirectoryLocations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+DirectoryLocations.h"; sourceTree = "<group>"; };
+		050374DC14953F3A00AC2668 /* NSFileManager+DirectoryLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+DirectoryLocations.m"; sourceTree = "<group>"; };
 		05F24FF614951B2300C4B5F3 /* JBSignatureControllerTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JBSignatureControllerTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05F24FFA14951B2300C4B5F3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		05F24FFC14951B2300C4B5F3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -87,6 +90,8 @@
 		05F2500014951B2300C4B5F3 /* JBSignatureControllerTest */ = {
 			isa = PBXGroup;
 			children = (
+				050374DB14953F3A00AC2668 /* NSFileManager+DirectoryLocations.h */,
+				050374DC14953F3A00AC2668 /* NSFileManager+DirectoryLocations.m */,
 				05F2500914951B2300C4B5F3 /* AppDelegate.h */,
 				05F2500A14951B2300C4B5F3 /* AppDelegate.m */,
 				05F2500114951B2300C4B5F3 /* Supporting Files */,
@@ -190,6 +195,7 @@
 				05F2500B14951B2300C4B5F3 /* AppDelegate.m in Sources */,
 				05F2501E14951B6E00C4B5F3 /* JBSignatureController.m in Sources */,
 				05F2501F14951B6E00C4B5F3 /* JBSignatureView.m in Sources */,
+				050374DD14953F3A00AC2668 /* NSFileManager+DirectoryLocations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

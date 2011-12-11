@@ -200,5 +200,22 @@ delegate = delegate_;
 	
 }
 
+#pragma mark - *** Public Methods ***
+
+/**
+ * Clears the signature from the signature view. If the delegate is subscribed,
+ * this method also messages the delegate with the image before it's cleared.
+ * @author Jesse Bunch
+ **/
+-(void)clearSignature {
+	
+	if (self.delegate && [self.delegate respondsToSelector:@selector(signatureCleared:signatureController:)]) {
+		UIImage *signatureImage = [self.signatureView getSignatureImage];
+		[self.delegate signatureCleared:signatureImage signatureController:self];
+	}
+	
+	[self.signatureView clearSignature];
+}
+
 
 @end

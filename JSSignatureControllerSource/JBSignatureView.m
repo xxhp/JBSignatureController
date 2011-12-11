@@ -16,6 +16,10 @@
 @private
 	__strong NSMutableArray *handwritingCoords_;
 	__weak UIImage *currentSignatureImage_;
+	float lineWidth_;
+	float signatureImageMargin_;
+	BOOL shouldCropSignatureImage_;
+	__strong UIColor *foreColor_;
 }
 @property(nonatomic,strong) NSMutableArray *handwritingCoords;
 @end
@@ -25,7 +29,11 @@
 @implementation JBSignatureView
 
 @synthesize 
-handwritingCoords = handwritingCoords_;
+handwritingCoords = handwritingCoords_,
+lineWidth = lineWidth_,
+signatureImageMargin = signatureImageMargin_,
+shouldCropSignatureImage = shouldCropSignatureImage_,
+foreColor = foreColor_;
 
 
 
@@ -39,7 +47,11 @@ handwritingCoords = handwritingCoords_;
     self = [super initWithFrame:frame];
     if (self) {
 		self.handwritingCoords = [[NSMutableArray alloc] init];
-		[self setBackgroundColor:[UIColor clearColor]];
+		self.lineWidth = 5.0f;
+		self.signatureImageMargin = 10.0f;
+		self.shouldCropSignatureImage = YES;
+		self.foreColor = [UIColor blackColor];
+		self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -60,9 +72,10 @@ handwritingCoords = handwritingCoords_;
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
 	// Set drawing params
-	CGContextSetLineWidth(context, 5.0f);
-	CGContextSetStrokeColorWithColor(context, [[UIColor blackColor] CGColor]);
+	CGContextSetLineWidth(context, self.lineWidth);
+	CGContextSetStrokeColorWithColor(context, [self.foreColor CGColor]);
 	CGContextSetLineCap(context, kCGLineCapRound);
+	CGContextSetShouldAntialias(context, YES);
 	CGContextBeginPath(context);
 	
 	// This flag tells us to move to the point
@@ -101,8 +114,6 @@ handwritingCoords = handwritingCoords_;
 	CGContextStrokePath(context);
 
 }
-
-
 
 #pragma mark - *** Touch Handling ***
 
@@ -150,17 +161,71 @@ handwritingCoords = handwritingCoords_;
 #pragma mark - *** Public Methods ***
 
 /**
- * Returns the signature as a UIImage
+ * Returns a UIImage with the signature cropped and centered with the margin
+ * specified in the signatureImageMargin property.
  * @author Jesse Bunch
  **/
 -(UIImage *)getSignatureImage {
 	
+	// Grab the image
 	UIGraphicsBeginImageContext(self.bounds.size);
 	[self drawRect: self.bounds];
-	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+	UIImage *signatureImage = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	
-	return image;
+	// Stop here if we're not supposed to crop
+	if (!self.shouldCropSignatureImage) {
+		return signatureImage;
+	}
+	
+	// Crop bound floats
+	// Give really high limits to min values so at least one tap
+	// location will be set as the minimum...
+	float minX = 99999999.0f, minY = 999999999.0f, maxX = 0.0f, maxY = 0.0f;
+	
+	// Loop through current coordinates to get the crop bounds
+	for (NSString *touchString in self.handwritingCoords) {
+		
+		// Unserialize
+		CGPoint tapLocation = CGPointFromString(touchString);
+		
+		// Ignore CGPointZero
+		if (CGPointEqualToPoint(tapLocation, CGPointZero)) {
+			continue;
+		}
+		
+		// Set boundaries
+		if (tapLocation.x < minX) minX = tapLocation.x;
+		if (tapLocation.x > maxX) maxX = tapLocation.x;
+		if (tapLocation.y < minY) minY = tapLocation.y;
+		if (tapLocation.y > maxY) maxY = tapLocation.y;
+		
+	}
+	
+	// Crop to the bounds (include a margin)
+	CGRect cropRect = CGRectMake(minX - lineWidth_ - self.signatureImageMargin,
+								 minY - lineWidth_ - self.signatureImageMargin,
+								 maxX - minX + (lineWidth_ * 2.0f) + (self.signatureImageMargin * 2.0f), 
+								 maxY - minY + (lineWidth_ * 2.0f) + (self.signatureImageMargin * 2.0f));
+	CGImageRef imageRef = CGImageCreateWithImageInRect([signatureImage CGImage], cropRect);
+	
+	// Convert back to UIImage
+	UIImage *signatureImageCropped = [UIImage imageWithCGImage:imageRef];
+	
+	// All done!
+	CFRelease(imageRef);
+	return signatureImageCropped;
+	
+}
+
+/**
+ * Clears any drawn signature from the screen
+ * @author Jesse Bunch
+ **/
+-(void)clearSignature {
+	
+	[self.handwritingCoords removeAllObjects];
+	[self setNeedsDisplay];
 	
 }
 

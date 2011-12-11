@@ -20,6 +20,7 @@
 	
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
+	// Initiallize the signature controller
 	JBSignatureController *signatureController = [[JBSignatureController alloc] init];
 	signatureController.delegate = self;
 	[self.window setRootViewController:signatureController];

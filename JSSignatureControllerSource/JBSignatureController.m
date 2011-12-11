@@ -58,7 +58,6 @@ delegate = delegate_;
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	
 	if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-
 	}
 	
 	return self;
@@ -84,27 +83,34 @@ delegate = delegate_;
  **/
 -(void)loadView {
 	
-	self.view = [[UIView alloc] initWithFrame:[[[UIApplication sharedApplication] keyWindow] bounds]];
+	self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
 	
+	// Background images
 	self.portraitBackgroundImage = [UIImage imageNamed:@"bg-signature-portrait"];
 	self.landscapeBackgroundImage = [UIImage imageNamed:@"bg-signature-landscape"];
-	
 	self.signaturePanelBackgroundImageView = [[UIImageView alloc] initWithImage:self.portraitBackgroundImage];
 	
+	// Signature view
 	self.signatureView = [[JBSignatureView alloc] init];
 	
+	// Confirm
 	self.confirmButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	[self.confirmButton setTitle:@"Confirm" forState:UIControlStateNormal];
 	[self.confirmButton sizeToFit];
-	[self.confirmButton setFrame:CGRectMake(self.view.frame.size.width - self.confirmButton.frame.size.width - 10.0f, 10.0f, self.confirmButton.frame.size
-											.width, self.confirmButton.frame.size.height)];
+	[self.confirmButton setFrame:CGRectMake(self.view.frame.size.width - self.confirmButton.frame.size.width - 10.0f, 
+											10.0f, 
+											self.confirmButton.frame.size.width, 
+											self.confirmButton.frame.size.height)];
 	[self.confirmButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
 	
-	
+	// Cancel
 	self.cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	[self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
 	[self.cancelButton sizeToFit];
-	[self.cancelButton setFrame:CGRectMake(10.0f, 10.0f, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height)];
+	[self.cancelButton setFrame:CGRectMake(10.0f, 
+										   10.0f, 
+										   self.cancelButton.frame.size.width, 
+										   self.cancelButton.frame.size.height)];
 	[self.cancelButton setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
 	
 }

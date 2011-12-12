@@ -45,10 +45,12 @@ Called when the user clears their signature or when clearSignature is called. (o
 Example
 =======
 
-See the example provided in the source code.
+A working example is provided in the project's source.
 
 
 Contributing
 ============
 
-Feel free to submit pull requests!
+1. Fork it!
+2. Make your changes in a new branch
+3. Submit a pull request

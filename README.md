@@ -2,6 +2,7 @@ Features
 ========
 
 * Presents the user with a fully customizeable view for them to sign
+* Supports portrait and horizontal layout
 * Returns a UIImage of the signature, optionally cropped and centered to fit
 * Example shows how to save signature to a PNG file
 * Code is well-documented allowing for easy customization

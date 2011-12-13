@@ -13,6 +13,7 @@
 #pragma mark - *** Private Interface ***
 
 @interface JBSignatureView() {
+
 @private
 	__strong NSMutableArray *handwritingCoords_;
 	__weak UIImage *currentSignatureImage_;
@@ -22,7 +23,11 @@
 	__strong UIColor *foreColor_;
 	CGPoint lastTapPoint_;
 }
+
 @property(nonatomic,strong) NSMutableArray *handwritingCoords;
+
+-(void)processPoint:(CGPoint)touchLocation;
+
 @end
 
 
@@ -123,9 +128,7 @@ foreColor = foreColor_;
  * Not implemented.
  * @author Jesse Bunch
  **/
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	// Nothin' doin'
-}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {}
 
 /**
  * This method adds the touch to our array.
@@ -136,16 +139,7 @@ foreColor = foreColor_;
 	UITouch *touch = [touches anyObject];
 	CGPoint touchLocation = [touch locationInView:self];
 	
-	// Only keep the point if it's > 5 points from the last
-	if (CGPointEqualToPoint(CGPointZero, lastTapPoint_) || 
-		fabs(touchLocation.x - lastTapPoint_.x) > 5.0f ||
-		fabs(touchLocation.y - lastTapPoint_.y) > 5.0f) {
-		
-		[self.handwritingCoords addObject:NSStringFromCGPoint(touchLocation)];
-		[self setNeedsDisplay];
-		lastTapPoint_ = touchLocation;
-		
-	}
+	[self processPoint:touchLocation];
 	
 }
 
@@ -166,6 +160,27 @@ foreColor = foreColor_;
 	[self.handwritingCoords addObject:NSStringFromCGPoint(CGPointZero)];
 }
 
+
+#pragma mark - *** Private Methods ***
+
+/**
+ * Processes the point received from touch events
+ * @author Jesse Bunch
+ **/
+-(void)processPoint:(CGPoint)touchLocation {
+	
+	// Only keep the point if it's > 5 points from the last
+	if (CGPointEqualToPoint(CGPointZero, lastTapPoint_) || 
+		fabs(touchLocation.x - lastTapPoint_.x) > 5.0f ||
+		fabs(touchLocation.y - lastTapPoint_.y) > 5.0f) {
+		
+		[self.handwritingCoords addObject:NSStringFromCGPoint(touchLocation)];
+		[self setNeedsDisplay];
+		lastTapPoint_ = touchLocation;
+		
+	}
+	
+}
 
 
 #pragma mark - *** Public Methods ***

@@ -20,6 +20,7 @@
 	float signatureImageMargin_;
 	BOOL shouldCropSignatureImage_;
 	__strong UIColor *foreColor_;
+	CGPoint lastTapPoint_;
 }
 @property(nonatomic,strong) NSMutableArray *handwritingCoords;
 @end
@@ -52,6 +53,7 @@ foreColor = foreColor_;
 		self.shouldCropSignatureImage = YES;
 		self.foreColor = [UIColor blackColor];
 		self.backgroundColor = [UIColor clearColor];
+		lastTapPoint_ = CGPointZero;
     }
     return self;
 }
@@ -75,7 +77,7 @@ foreColor = foreColor_;
 	CGContextSetLineWidth(context, self.lineWidth);
 	CGContextSetStrokeColorWithColor(context, [self.foreColor CGColor]);
 	CGContextSetLineCap(context, kCGLineCapRound);
-	CGContextSetShouldAntialias(context, YES);
+	CGContextSetLineJoin(context, kCGLineJoinRound);
 	CGContextBeginPath(context);
 	
 	// This flag tells us to move to the point
@@ -134,8 +136,16 @@ foreColor = foreColor_;
 	UITouch *touch = [touches anyObject];
 	CGPoint touchLocation = [touch locationInView:self];
 	
-	[self.handwritingCoords addObject:NSStringFromCGPoint(touchLocation)];	
-	[self setNeedsDisplay];
+	// Only keep the point if it's > 5 points from the last
+	if (CGPointEqualToPoint(CGPointZero, lastTapPoint_) || 
+		fabs(touchLocation.x - lastTapPoint_.x) > 5.0f ||
+		fabs(touchLocation.y - lastTapPoint_.y) > 5.0f) {
+		
+		[self.handwritingCoords addObject:NSStringFromCGPoint(touchLocation)];
+		[self setNeedsDisplay];
+		lastTapPoint_ = touchLocation;
+		
+	}
 	
 }
 

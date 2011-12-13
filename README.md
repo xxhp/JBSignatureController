@@ -48,6 +48,12 @@ Example
 A working example is provided in the project's source.
 
 
+License
+=======
+
+MIT/X11 Open Source License
+
+
 Contributing
 ============
 
